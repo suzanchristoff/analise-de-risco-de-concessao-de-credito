@@ -141,6 +141,10 @@ Foi desenvolvido um painel interativo no **Google Looker Studio** que permite:
 - Visualizar o **perfil de inadimplência** por segmento
 - Apoiar decisões de concessão de crédito em tempo real
 
+<img src="imagens/perfil_clientes.png" alt="Alt text" width="800" height="500">
+
+<img src="imagens/consulta_score_de_risco.png" alt="Alt text" width="800" height="500">
+
 ---
 
 ## Limitações e Próximos Passos
