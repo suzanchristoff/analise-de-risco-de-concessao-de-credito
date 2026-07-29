@@ -32,20 +32,20 @@ tratamento e transformação dos dados.
                     │ analíticos   │
                     └──────────────┘
 
-Bronze
+### Bronze
 
 Armazena os dados em seu estado bruto, preservando a estrutura
 original da fonte.
 
 Ver documentação da camada Bronze
 
-Silver
+### Silver
 
 Responsável pelo tratamento e padronização dos dados.
 
 Ver documentação da camada Silver
 
-Gold
+### Gold
 
 Contém os dados transformados e preparados para consumo analítico.
 
