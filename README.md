@@ -82,7 +82,7 @@ Os conjuntos de dados finais construídos na camada Gold são exportados no form
 
 ### 6.1 Visão geral
 
-![Diagrama pipeline risco credito.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Diagrama_pipeline_risco_credito.png)
+![Diagrama pipeline risco credito.png](imagens/Diagrama_pipeline_risco_credito.png)
 
 ### 6.2 Arquitetura em camadas
 
