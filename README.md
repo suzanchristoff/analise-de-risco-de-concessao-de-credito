@@ -163,21 +163,21 @@ Principais descobertas sobre os **36.000 clientes** da base:
 > Fornece uma visão geral dos indicadores de inadimplência entre os segmentos de clientes, permitindo comparar as taxas de inadimplência e o risco relativo entre diferentes perfis demográficos e relacionados ao crédito.
 > 
 
-![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%202.png)
+![image.png](imagens/dashboard1.png)
 
 #### 11.2 Perfis de risco
 
 > Fornece uma visão geral da distribuição do perfil de risco dos clientes com base na estrutura de pontuação de risco, permitindo que os usuários identifiquem a concentração de clientes nas categorias de risco muito baixo, baixo, médio e alto.
 > 
 
-![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%203.png)
+![image.png](imagens/dashboard2.png)
 
 #### 11.3 Detalhamento do cliente
 
 > Permite aos usuários analisar individualmente cada cliente e verificar seu perfil de risco e os indicadores de risco usados na estrutura de pontuação.
 > 
 
-![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%204.png)
+![image.png](imagens/dashboard3.png)
 
 ## 12. Estrutura do Repositório
 
@@ -239,7 +239,7 @@ O modelo pode ser aprimorado com a inclusão de variáveis adicionais:
 
 [Dicionário dos dados originais](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Dicion%C3%A1rio%20dos%20dados%20originais%203c8207fbe913809997f9ce99dc7001e8.md)
 
-[Pipeline transformação dos dados](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Pipeline%20transforma%C3%A7%C3%A3o%20dos%20dados%203c8207fbe9138043bd83ee4658a412dd.md)
+[Pipeline transformação dos dados](docs/pipeline_transformacao_dados)
 
 [Check list tratamento inicial dos dados](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Check%20list%20tratamento%20inicial%20dos%20dados%203c8207fbe9138085baf8fbd5d01c7c0e.md)
 
