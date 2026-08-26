@@ -1,50 +1,72 @@
-# Análise de Risco de Crédito — Score e Classificação de Clientes
+# Documentação Projeto Análise de Risco de Crédito
 
-**Super Caja Bank | Análise de Dados | Suzan Christoff**
+# Credit Risk Analytics — End-to-End Risk Scoring
 
----
+Projeto de análise de risco de crédito, realizado de ponta a ponta, usando DuckDB e SQL para transformar dados brutos de clientes e empréstimos em segmentos de risco, indicadores de risco relativos e uma pontuação de risco no nível do cliente.
 
-## Contexto
-
-Com a recente queda das taxas de juros, o banco **Super Caja** registrou um aumento expressivo na demanda por crédito. Para lidar com o volume crescente de solicitações e a pressão sobre a taxa de inadimplência, o banco identificou a necessidade de **automatizar e otimizar** o processo de análise de crédito, substituindo a avaliação manual por uma abordagem baseada em dados.
+**`Stack:** DuckDB · SQL · DBeaver · Python ( Google Colab) · Power BI · DAX`
 
 ---
 
-## Objetivos
+## 1. Visão Geral
 
-- Identificar o **perfil de clientes com risco de inadimplência**
+Este projeto desenvolve um pipeline analítico completo para avaliação de risco de crédito. Dados brutos de clientes, empréstimos e inadimplência são ingeridos e transformados usando DuckDB por meio de uma arquitetura em camadas baseada nas camadas Main, Bronze, Silver e Gold. Os conjuntos finais de dados analíticos são usados para calcular taxas de inadimplência, razões de risco relativas e um score de risco a nível de cliente.
+
+---
+
+## 2. Problema de negócio
+
+> As instituições financeiras precisam identificar os perfis de clientes associados a um risco de crédito mais alto para apoiar a avaliação de crédito, o monitoramento e a gestão da carteira.
+> 
+
+### Pergunta-chave
+
+> Quais características de clientes e de crédito estão associadas a um maior risco de inadimplência, e como essas características podem ser combinadas em uma pontuação de risco do cliente que seja fácil de entender?
+> 
+
+## 3. Objetivos
+
+- Identificar os perfis de clientes associados a taxas mais altas de inadimplência;
+- Calcular o risco relativo entre os diferentes segmentos de clientes;
+- Transformar variáveis financeiras e comportamentais brutas em características analíticas;
+- Desenvolver uma pontuação de risco (score de crédito) que permita avaliar e classificar o risco de crédito individual de cada cliente com base em suas características financeiras e comportamentais.
+- Criar um pipeline de dados reproduzível usando DuckDB e SQL.
+- Identificar o **perfil de clientes com risco de inadimplência:  idade, salário, nível de endividamento e uso de crédito dos clientes inadimplentes**
 - Construir um **score de crédito** baseado em análise de dados
 - **Avaliar o risco** de concessão de crédito por segmento
 - **Classificar clientes** em categorias de risco (baixo, médio e alto)
-- Integrar métricas existentes do banco para fortalecer o modelo
-- Validar ou refutar as seguintes hipóteses:
+- Integrar métricas existentes do banco para fortalecer o modelo (número de clientes inadimplentes da base atual)
+
+# Hipóteses levantadas
+
+- As seguintes hipóteses foram levantadas:
     1. Pessoas mais jovens correm maior risco de não pagamento
     2. Pessoas com mais empréstimos ativos têm maior risco de inadimplência
     3. Pessoas que atrasaram pagamentos por mais de 90 dias têm maior risco de inadimplência
 
 ---
 
-## Fonte de Dados
+## 4. Fonte de dados
 
-O dataset é composto por **4 tabelas**:
+Os dados levantados foram obtidos a partir dos seguintes arquivos:
 
-| Tabela | Descrição |
-| --- | --- |
-| `user_info` | Dados cadastrais do cliente (idade, gênero, salário, dependentes) |
-| `loans_outstanding` | Empréstimos ativos por cliente (tipo: imóveis ou outros) |
-| `loans_detail` | Comportamento de pagamento (atrasos, uso de crédito, endividamento) |
-| `default` | Flag de inadimplência (0 = adimplente, 1 = inadimplente) |
+| Nome do arquivo | Descrição | Total de registros iniciais |
+| --- | --- | --- |
+| `user_info**.csv/cadastro_clientes**` | Dados cadastrais dos clientes (idade, gênero, salário, dependentes) | 36.000 |
+| `loans_outstanding**.csv/carteira_emprestimos**` | Dados referentes aos empréstimos ativos por cliente, se do tipo imóveis ou outros | 305.335 |
+| `loans_detail**.csv/detalhes_emprestimos**` | Contém dados relacionados ao comportamento de pagamento dos clientes , como número de atrasos, uso percentual do limite de crédito e nível de endividamento , ou seja, percentual que as dívidas representam em relação ao patrimônio do cliente. | 36.000 |
+| `default.csv/flag_inadimplencia` | Flag de inadimplência, onde 0 indica que é o cliente está adimplente e 1 indica que está inadimplente. | 36.000 |
 
 ---
 
-## Ferramentas e Tecnologias
+## 5. Ferramentas, linguagens e tecnologias
 
-| Ferramenta | Uso |
+| Ferramenta/Tecnologia | Uso |
 | --- | --- |
-| **Google BigQuery** | Armazenamento, consultas SQL e limpeza de dados |
-| **Google Colab + Python** | Análise exploratória, visualizações e engenharia de features |
-| **Google Looker Studio** | Dashboard interativo para consulta de risco por cliente |
-| **Google Apresentações** | Apresentação dos resultados |
+| **DuckDB** | Armazenamento, consultas SQL e limpeza de dados |
+| **Google Colab + Python** | Análise exploratória e visualizações  |
+| **Power BI** | Dashboard interativo para consulta de risco por cliente |
+| **Canva** | Design dashboard e apresentação dos resultados |
 
 **Linguagens:** SQL · Python
 
@@ -52,18 +74,77 @@ O dataset é composto por **4 tabelas**:
 
 ---
 
-## Etapas do Projeto
+## 6. Arquitetura e pipeline de dados
 
-### 1. Processamento e Preparação dos Dados
+O projeto foi concebido como um pipeline analítico de ponta a ponta, usando DuckDB e SQL para ingerir, transformar e organizar dados brutos de clientes e crédito em conjuntos de dados prontos para análise de risco de crédito e visualização. 
 
-- **Nulos identificados e tratados:** 7.199 nulos em `last_month_salary` e 943 em `number_dependents` → substituídos pela **mediana**
-- **Duplicados:** nenhum identificado
-- **Outliers:** tratados nas variáveis de atraso de pagamento, taxa de endividamento e uso do limite de crédito
-- **Inconsistências categóricas:** unificação das categorias `'others'` e `'OTHER'` na variável `loan_type`
-- **Correlação:** identificada alta correlação (multicolinearidade) entre as variáveis de atraso → mantida apenas a variável `more_90_days_overdue`
-- **Junção:** tabelas unidas via `LEFT JOIN` em SQL, gerando a view `view_tb_final_dados_integrados`
+O pipeline segue uma arquitetura em camadas composta pelas camadas Main, Bronze, Silver e Gold, sendo que cada camada tem uma responsabilidade específica no processo de transformação de dados.
 
-### 2. Análise Exploratória dos Dados (EDA)
+Os conjuntos de dados finais construídos na camada Gold são exportados no formato Parquet e servem como fonte de dados para a camada analítica e o dashboard de risco de três páginas.
+
+### 6.1 Visão geral
+
+![Diagrama pipeline risco credito.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Diagrama_pipeline_risco_credito.png)
+
+### 6.2 Arquitetura em camadas
+
+- Main : Arquivos CSV brutos são importados para o DuckDB sem transformação, preservando a fonte original.
+- Bronze: Os dados são padronizados e regras iniciais de qualidade são aplicadas, incluindo renomeação de colunas, normalização de categorias e criação de sinais de qualidade dos dados.
+- Prata: Dimensões de clientes e características de risco de crédito são criadas, incluindo faixas etárias, classificações de renda, classificações de inadimplência, utilização de crédito e classificações de dívida.
+- Ouro: Conjuntos de dados analíticos são criados para segmentação de risco, análise de risco relativo e pontuação no nível do cliente.
+
+> Para uma descrição detalhada das transformações, data quality, feature engineering  e implementação em SQL camada por camada, veja a [Documentação de Transformação de Dados.](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Documenta%C3%A7%C3%A3o%20detalhada%20arquitetura%20e%20pipeline%203c6207fbe9138091be6feb889382826c.md)
+> 
+
+## 7. Metodologia do cálculo do risco relativo
+
+A aplicação desta metodologia teve por objetivo identificar quais segmentos de clientes apresentam maior propensão à inadimplência, comparando cada grupo contra o comportamento médio da carteira.
+
+#### 7.1 Segmentação dos clientes
+
+Os clientes foram agrupados segundo 7 variáveis: idade, salário, número de dependentes, total de empréstimos, número de atrasos superiores a 90 dias, uso do limite de crédito e taxa de endividamento.
+
+#### 7.2 Índice de inadimplência por segmento
+
+Para cada grupo de cada variável, calculou-se:
+
+![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image.png)
+
+#### 7.3 Risco relativo (relative risk)
+
+O risco relativo de cada segmento foi obtido comparando seu índice de inadimplência contra o índice médio da amostra total (~36 mil clientes):
+
+![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%201.png)
+
+**Interpretação:**
+
+- Risco relativo = 1 → o segmento tem a mesma taxa de inadimplência da carteira geral
+- Risco relativo > 1 → o segmento é mais arriscado que a média (ex: 1.8 = 80% mais propenso à inadimplência)
+- Risco relativo < 1 → o segmento é mais seguro que a média
+
+Essa é a métrica clássica de **razão de risco** (risk ratio), usada em epidemiologia e adaptada aqui para concessão de crédito — permite comparar segmentos de escalas diferentes numa métrica só, normalizada pelo baseline da população.
+
+## 8. Score de risco
+
+| Score | Perfil de risco |
+| --- | --- |
+| 0 | Risco muito baixo |
+| 1–2 | Baixo risco |
+| 3 | Risco médio |
+| 4–5 | Alto risco |
+
+## 9. Resultados
+
+Clientes classificados como **alto risco** tendem a apresentar:
+
+- Uso acima de **56%** do limite de crédito disponível
+- Nível de endividamento **alto a extremo** (38% a 192% do patrimônio)
+- **Histórico de atrasos** nos pagamentos
+- Salário **abaixo de R$ 3.908**
+- Idade entre **21 e 40 anos**
+- **Mais de 3 dependentes**
+
+## 10. Insights
 
 Principais descobertas sobre os **36.000 clientes** da base:
 
@@ -77,77 +158,73 @@ Principais descobertas sobre os **36.000 clientes** da base:
 - **Uso do limite de crédito:** 50% usam até 15% do limite disponível
 - **Endividamento:** 25% dos clientes têm mais de 87% do patrimônio comprometido
 
-### 3. Engenharia de Features e Score de Risco
+## 11. Dashboard & BI
 
-Foram criadas variáveis de segmentação e risco para as seguintes dimensões:
+#### 11.1 Indicadores de inadimplência
 
-| Dimensão | Tipo de Variável Criada |
-| --- | --- |
-| Idade | Faixas etárias + classificação de risco |
-| Salário | Faixas salariais + classificação de risco |
-| Nº de dependentes | Faixas + classificação de risco |
-| Total de empréstimos | Contagem consolidada + classificação de risco |
-| Atrasos > 90 dias | Segmentação + classificação de risco |
-| Uso do limite de crédito | Faixas percentuais + classificação de risco |
-| Taxa de endividamento | Faixas + classificação de risco |
+> Fornece uma visão geral dos indicadores de inadimplência entre os segmentos de clientes, permitindo comparar as taxas de inadimplência e o risco relativo entre diferentes perfis demográficos e relacionados ao crédito.
+> 
 
-Para cada dimensão, foi calculado:
+![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%202.png)
 
-- **Probabilidade de inadimplência** por grupo
-- **Risco relativo** = índice do grupo ÷ índice médio geral
-- **Variável dummy** (0 = baixo risco · 1 = alto risco)
-- **Score final** = soma das dummies (0 a 7 pontos)
+#### 11.2 Perfis de risco
 
----
+> Fornece uma visão geral da distribuição do perfil de risco dos clientes com base na estrutura de pontuação de risco, permitindo que os usuários identifiquem a concentração de clientes nas categorias de risco muito baixo, baixo, médio e alto.
+> 
 
-## Score e Classificação de Risco
+![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%203.png)
 
-| Score | Classificação |
-| --- | --- |
-| 1–2 pontos | Risco Baixo |
-| 3 pontos | Risco Moderado |
-| 4–5 pontos | Risco Alto |
+#### 11.3 Detalhamento do cliente
 
----
+> Permite aos usuários analisar individualmente cada cliente e verificar seu perfil de risco e os indicadores de risco usados na estrutura de pontuação.
+> 
 
-## Perfil dos Clientes de Maior Risco
+![image.png](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/image%204.png)
 
-Clientes classificados como **alto risco** tendem a apresentar:
+## 12. Estrutura do Repositório
 
-- Uso acima de **56%** do limite de crédito disponível
-- Nível de endividamento **alto a extremo** (38% a 192% do patrimônio)
-- **Histórico de atrasos** nos pagamentos
-- Salário **abaixo de R$ 3.908**
-- Idade entre **21 e 40 anos**
-- **Mais de 3 dependentes**
+```sql
+project/
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── duckdb/
+│   ├── 01_main.sql
+│   ├── 02_bronze.sql
+│   ├── 03_silver.sql
+│   └── 04_gold.sql
+│
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02_risk_analysis.ipynb
+│   └── 03_visualization.ipynb
+│
+├── docs/
+│
+└── README.md
+```
 
----
+## 13. Como Reproduzir
 
-## Validação das Hipóteses
+```sql
+# 1. Clone o repositório
 
-| Hipótese | Resultado |
-| --- | --- |
-| Pessoas mais jovens têm maior risco de inadimplência | **Confirmada** — faixas etárias mais jovens apresentam os maiores índices |
-| Mais empréstimos ativos = maior risco de inadimplência | **Refutada** — clientes com mais empréstimos têm os *menores* indicadores |
-| Atrasos > 90 dias correlacionam com inadimplência | **Confirmada** — correlação positiva, embora esse grupo seja minoria na base |
+git clone https://github.com/<seu-usuario>/super-caja-bank.git
 
----
+# 2. Rode os scripts SQL na ordem: main -> bronze -> silver -> gold
 
-## Dashboard
+# (via DBeaver conectado a um arquivo DuckDB local, ou duckdb CLI)
 
-Foi desenvolvido um painel interativo no **Google Looker Studio** que permite:
+# 3. Exporte as tabelas Gold para Parquet
 
-- Consultar o **score de risco** de clientes individuais
-- Visualizar o **perfil de inadimplência** por segmento
-- Apoiar decisões de concessão de crédito em tempo real
+# (ver notebooks/exploracao_gold_para_parquet.ipynb)
 
-<img src="imagens/perfil_clientes.png" alt="Alt text" width="800" height="500">
+# 4. Abra powerbi/super_caja_bank.pbix e aponte para data/gold/*.parquet
+```
 
-<img src="imagens/consulta_score_de_risco.png" alt="Alt text" width="800" height="500">
-
----
-
-## Limitações e Próximos Passos
+## 14. Limitações e próximos passos
 
 O modelo pode ser aprimorado com a inclusão de variáveis adicionais:
 
@@ -160,5 +237,20 @@ O modelo pode ser aprimorado com a inclusão de variáveis adicionais:
 
 ---
 
-> *Projeto desenvolvido individualmente como parte do portfólio de análise de dados.*
->
+## 15. Documentos adicionais
+
+[Dicionário dos dados originais](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Dicion%C3%A1rio%20dos%20dados%20originais%203c8207fbe913809997f9ce99dc7001e8.md)
+
+[Pipeline transformação dos dados](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Pipeline%20transforma%C3%A7%C3%A3o%20dos%20dados%203c8207fbe9138043bd83ee4658a412dd.md)
+
+[Check list tratamento inicial dos dados](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Check%20list%20tratamento%20inicial%20dos%20dados%203c8207fbe9138085baf8fbd5d01c7c0e.md)
+
+[Consultas SQL](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Consultas%20SQL%203c8207fbe91380418a33dc2634d2791b.md)
+
+[Documentação detalhada arquitetura e pipeline](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Documenta%C3%A7%C3%A3o%20detalhada%20arquitetura%20e%20pipeline%203c6207fbe9138091be6feb889382826c.md)
+
+## Sobre
+
+Projeto desenvolvido por Suzan, em transição de carreira para Analytics Engineering, com background em gestão administrativo-financeira em varejo/e-commerce.
+
+📫 [LinkedIn](https://www.linkedin.com/in/suzanchristoff/)
