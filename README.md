@@ -1,4 +1,4 @@
-## Credit Risk Analytics — End-to-End Risk Scoring
+## Análise de Risco de Crédito — Pipeline End-to-End 
 
 Projeto de análise de risco de crédito, realizado de ponta a ponta, usando DuckDB e SQL para transformar dados brutos de clientes e empréstimos em segmentos de risco, indicadores de risco relativos e uma pontuação de risco no nível do cliente.
 
