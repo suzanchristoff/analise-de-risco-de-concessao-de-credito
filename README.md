@@ -29,11 +29,6 @@ Este projeto desenvolve um pipeline analítico completo para avaliação de risc
 - Transformar variáveis financeiras e comportamentais brutas em características analíticas;
 - Desenvolver uma pontuação de risco (score de crédito) que permita avaliar e classificar o risco de crédito individual de cada cliente com base em suas características financeiras e comportamentais.
 - Criar um pipeline de dados reproduzível usando DuckDB e SQL.
-- Identificar o **perfil de clientes com risco de inadimplência:  idade, salário, nível de endividamento e uso de crédito dos clientes inadimplentes**
-- Construir um **score de crédito** baseado em análise de dados
-- **Avaliar o risco** de concessão de crédito por segmento
-- **Classificar clientes** em categorias de risco (baixo, médio e alto)
-- Integrar métricas existentes do banco para fortalecer o modelo (número de clientes inadimplentes da base atual)
 
 # Hipóteses levantadas
 
@@ -88,10 +83,10 @@ Os conjuntos de dados finais construídos na camada Gold são exportados no form
 
 - Main : Arquivos CSV brutos são importados para o DuckDB sem transformação, preservando a fonte original.
 - Bronze: Os dados são padronizados e regras iniciais de qualidade são aplicadas, incluindo renomeação de colunas, normalização de categorias e criação de sinais de qualidade dos dados.
-- Prata: Dimensões de clientes e características de risco de crédito são criadas, incluindo faixas etárias, classificações de renda, classificações de inadimplência, utilização de crédito e classificações de dívida.
-- Ouro: Conjuntos de dados analíticos são criados para segmentação de risco, análise de risco relativo e pontuação no nível do cliente.
+- Silver: Dimensões de clientes e características de risco de crédito são criadas, incluindo faixas etárias, classificações de renda, classificações de inadimplência, utilização de crédito e classificações de dívida.
+- Gold: Conjuntos de dados analíticos são criados para segmentação de risco, análise de risco relativo e pontuação no nível do cliente.
 
-> Para uma descrição detalhada das transformações, data quality, feature engineering  e implementação em SQL camada por camada, veja a [Documentação de Transformação de Dados.](Documenta%C3%A7%C3%A3o%20Projeto%20An%C3%A1lise%20de%20Risco%20de%20Cr%C3%A9dito/Documenta%C3%A7%C3%A3o%20detalhada%20arquitetura%20e%20pipeline%203c6207fbe9138091be6feb889382826c.md)
+> Para uma descrição detalhada das transformações, data quality, feature engineering  e implementação em SQL camada por camada, veja a [Documentação de Transformação de Dados.](docs/pipeline_transformacao_dados)
 > 
 
 ## 7. Metodologia do cálculo do risco relativo
